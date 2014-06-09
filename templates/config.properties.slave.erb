@@ -1,0 +1,7 @@
+coordinator=false
+datasources=jmx,hive
+http-server.http.port=8080
+presto-metastore.db.type=h2
+presto-metastore.db.filename=<%= scope.lookupvar('presto::params::presto_base') %>/presto/metastore
+task.max-memory=1GB
+discovery.uri=http://<%= scope.lookupvar('presto::params::master') %>:8080

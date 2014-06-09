@@ -1,0 +1,9 @@
+coordinator=true
+datasources=jmx
+node-scheduler.include-coordinator=false
+http-server.http.port=8080
+presto-metastore.db.type=h2
+presto-metastore.db.filename=<%= scope.lookupvar('presto::params::presto_base') %>/presto/metastore
+task.max-memory=1GB
+discovery-server.enabled=true
+discovery.uri=http://<%= scope.lookupvar('presto::params::master') %>:8080
