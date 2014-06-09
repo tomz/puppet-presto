@@ -49,7 +49,7 @@ class presto::params {
 	}             
 
     $master = $::hostname ? {
-        default         => ["test1.openstacklocal"],
+        default         => "test1.openstacklocal",
     }
  
     $slaves = $::hostname ? {

@@ -60,7 +60,7 @@ class presto {
         before => Exec["untar-presto"],
         require => File["presto-base"],
         path    => ["/bin", "/usr/bin", "/usr/sbin"],
-        creates => "${presto::params::presto_base}/presto-${presto::params::file}.tar.gz",
+        creates => "${presto::params::presto_base}/presto-server-${presto::params::version}.tar.gz",
     }
 
     file { "${presto::params::presto_base}/presto-server-${presto::params::version}.tar.gz":
