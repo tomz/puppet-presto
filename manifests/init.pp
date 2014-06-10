@@ -53,7 +53,7 @@ class presto {
     }
  
     exec { "download ${presto::params::presto_base}/presto-server-${presto::params::version}.tar.gz":
-        command => "wget http://central.maven.org/maven2/com/facebook/presto/presto-server/0.69/presto-server-${presto::params::version}.tar.gz",
+        command => "wget http://central.maven.org/maven2/com/facebook/presto/presto-server/${presto::params::version}/presto-server-${presto::params::version}.tar.gz",
         cwd => "${presto::params::presto_base}",
         alias => "download-presto",
         user => "${presto::params::presto_user}",
