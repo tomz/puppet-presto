@@ -3,6 +3,8 @@ import sys
 import os
 import json
 import re
+import hashlib
+import random
 
 import tornado.ioloop
 import tornado.web
@@ -35,9 +37,12 @@ class QueryHandler(tornado.web.RequestHandler):
                     ret['Data'] = presto.getdata()
                 self.write(json.dumps(ret))
 
+random.seed()
+random_api = hashlib.sha224(str(random.random())).hexdigest()
+print("Random API: ", random_api)
 
 application = tornado.web.Application([
-    (r"/query", QueryHandler),
+    (r"/" + random_api, QueryHandler),
 ])    
 
 
