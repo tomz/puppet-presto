@@ -37,8 +37,9 @@ class QueryHandler(tornado.web.RequestHandler):
                     ret['Data'] = presto.getdata()
                 self.write(json.dumps(ret))
 
-random.seed()
-random_api = hashlib.sha224(str(random.random())).hexdigest()
+#random.seed()
+#random_api = hashlib.sha224(str(random.random())).hexdigest()
+random_api = hashlib.md5(config.web_key).hexdigest()
 print("Random API: ", random_api)
 
 application = tornado.web.Application([
