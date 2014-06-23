@@ -10,9 +10,11 @@ import tornado.ioloop
 import tornado.web
 
 import prestoclient
+import voltdbclient
 import config
 
 presto = prestoclient.PrestoClient(config.presto_server)
+voltdb = voltdbclient.VoltDBClient(config.voltdb_server)
 
 class QueryHandler(tornado.web.RequestHandler):
     def post(self):
@@ -25,6 +27,33 @@ class QueryHandler(tornado.web.RequestHandler):
         if m == None:
             self.write("Not in allowed IP range.")        
         else:
+            db_type = self.get_argument("db", "presto")
+
+            if db_type == "presto":
+                self.query_with_presto()
+            elif db_type == "voltdb":
+                self.query_with_voltdb()
+            else:
+                self.write("Given wrong database parameter")
+
+    def query_with_voltdb(self):
+            sql = self.get_argument("query")
+            voltdb_ret = voltdb.query(sql)
+            ret = {}
+            if 'results' in voltdb_ret:
+                if len(voltdb_ret['results']) > 0:
+                    if 'schema' in voltdb_ret['results'][0]:
+                        ret['Columns'] = voltdb_ret['results'][0]['schema']
+
+                    if 'data' in voltdb_ret['results'][0]:
+                        ret['Datalength'] = len(voltdb_ret['results'][0]['data'])
+                        ret['Data'] = voltdb_ret['results'][0]['data']
+
+            self.write(json.dumps(ret))
+ 
+
+    def query_with_presto(self):        
+
             sql = self.get_argument("query")
             if not presto.runquery(sql):
                 error = json.dumps({'Error': presto.getlasterrormessage()})
