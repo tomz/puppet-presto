@@ -17,6 +17,12 @@ presto = prestoclient.PrestoClient(config.presto_server)
 voltdb = voltdbclient.VoltDBClient(config.voltdb_server)
 
 class QueryHandler(tornado.web.RequestHandler):
+
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Methods", "POST,OPTIONS")
+        self.set_header("Access-Control-Allow-Headers", "Content-Type, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control")
+
     def post(self):
 
         remote_ip = self.request.remote_ip
@@ -53,7 +59,6 @@ class QueryHandler(tornado.web.RequestHandler):
  
 
     def query_with_presto(self):        
-
             sql = self.get_argument("query")
             if not presto.runquery(sql):
                 error = json.dumps({'Error': presto.getlasterrormessage()})
