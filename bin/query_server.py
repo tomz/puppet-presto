@@ -8,6 +8,7 @@ import random
 
 import tornado.ioloop
 import tornado.web
+import tornado.httpserver
 
 import prestoclient
 import voltdbclient
@@ -80,8 +81,13 @@ application = tornado.web.Application([
     (r"/" + random_api, QueryHandler),
 ])    
 
+http_server = tornado.httpserver.HTTPServer(application, ssl_options={
+    "certfile": "server.crt",
+    "keyfile": "server.key",
+})
 
 if __name__ == "__main__":
+    http_server.listen(8081)
     application.listen(8080)
     tornado.ioloop.IOLoop.instance().start()
 
